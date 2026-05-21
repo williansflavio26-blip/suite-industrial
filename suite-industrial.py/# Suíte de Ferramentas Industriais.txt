@@ -1,0 +1,15 @@
+# Suíte de Ferramentas Industriais
+
+Aplicação desktop com PyQt5 para:
+- ⚡ Cálculos elétricos (NBR 5410, NR-10, NR-12, IEC)
+- 🛢️ Tabela de lubrificação (NBR 15594)
+- ⏱️ Cálculo de horas trabalhadas (CLT e NR-16)
+- 📊 Conversor de pressão (SI)
+
+## Como executar
+1. Instale Python 3.12+
+2. Instale PyQt5: `pip install PyQt5`
+3. Execute: `python suite_industrial.py`
+
+## Autor
+Seu nome Willians
