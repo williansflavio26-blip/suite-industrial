@@ -12,4 +12,4 @@ Aplicação desktop com PyQt5 para:
 3. Execute: `python suite_industrial.py`
 
 ## Autor
-Seu nome Willians
+Willians
