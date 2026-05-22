@@ -4,7 +4,7 @@ import math
 st.set_page_config(page_title="Suit Industrial - Prof. André Gheiralde", layout="wide")
 
 st.title("🏭 Suit Industrial")
-st.subheader("Prof. André Gheiralde - Elétrica | Lubrificação | Pressão | Circuitos CC")
+st.subheader("- Elétrica | Lubrificação | Pressão | Circuitos CC")
 
 menu = st.sidebar.selectbox(
     "Escolha a calculadora",
