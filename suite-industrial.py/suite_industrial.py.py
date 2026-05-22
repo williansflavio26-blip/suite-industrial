@@ -1,7 +1,7 @@
 import streamlit as st
 import math
 
-st.set_page_config(page_title="Suit Industrial - Prof. André Gheiralde", layout="wide")
+st.set_page_config(page_title="Suit Industrial", layout="wide")
 
 st.title("🏭 Suit Industrial")
 st.subheader("- Elétrica | Lubrificação | Pressão | Circuitos CC")
@@ -170,4 +170,4 @@ else:
                 st.markdown(f"**Série R1+R2 = {Rs:.2f} Ω** → Paralelo com R3: Req = **{Req:.2f} Ω**")
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Prof. André Gheiralde - Detalhamento completo")
+st.sidebar.caption("Detalhamento completo")
