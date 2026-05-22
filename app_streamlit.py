@@ -104,16 +104,31 @@ else:
         "Associação de resistores"
     ])
     if problema.startswith("Questão 1"):
-        if st.button("Resolver Questão 1"):
-            st.markdown("""
-            **Instrumento:** Voltímetro ideal (R∞, paralelo)
-            **Corrente:** Σfem = 10+15-5 = 20V, ΣR = 60Ω → I = 20/60 = 0,333A
-            **Tensão VQP:** 11V (alternativa A)
-            """)
-            st.success("✅ Resposta: 11 V")
-    elif problema.startswith("Questão 2"):
-        st.info("Informe os dados do circuito (conforme a imagem da prova)")
-        col1, col2 = st.columns(2)
+    st.markdown("**Insira os valores do circuito:**")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        R1 = st.number_input("R1 (Ω)", value=10.0, step=1.0)
+        E1 = st.number_input("E1 (V)", value=5.0, step=1.0)
+    with col2:
+        R2 = st.number_input("R2 (Ω)", value=20.0, step=1.0)
+        E2 = st.number_input("E2 (V)", value=10.0, step=1.0)
+    with col3:
+        R3 = st.number_input("R3 (Ω)", value=30.0, step=1.0)
+        E3 = st.number_input("E3 (V)", value=15.0, step=1.0)
+    
+    if st.button("Resolver Questão 1"):
+        fem_total = E2 + E3 - E1
+        R_total = R1 + R2 + R3
+        I = fem_total / R_total if R_total != 0 else 0
+        VQP = - (I * R1) + E1
+        resposta = round(VQP)
+        
+        st.markdown("---")
+        st.subheader("📐 Resolução detalhada")
+        st.markdown(f"""
+        **Instrumento:** Voltímetro ideal (R∞, paralelo)
+        
+        **1. Corrente na malha principal:**
         with col1:
             E_ger = st.number_input("Tensão do gerador (V)", value=50.0)
             r_int = st.number_input("Resistência interna (Ω)", value=1.0)
