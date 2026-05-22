@@ -98,93 +98,36 @@ elif menu == "💨 Pressão (NR-13)":
 else:
     st.header("🔌 Calculadora de Circuitos CC")
     problema = st.selectbox("Problema", [
-        "Questão 1: Voltímetro entre Q e P (R1=10Ω, R2=20Ω, R3=30Ω; E1=5V, E2=10V, E3=15V)",
-        "Questão 2: Amperímetro e resistor R (i=5A)",
+        "Questão 1: Voltímetro entre Q e P",
+        "Questão 2: Amperímetro e resistor R",
         "Lei de Ohm",
         "Associação de resistores"
     ])
+
+    # ------------------ Questão 1 ------------------
     if problema.startswith("Questão 1"):
-    st.markdown("**Insira os valores do circuito:**")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        R1 = st.number_input("R1 (Ω)", value=10.0, step=1.0)
-        E1 = st.number_input("E1 (V)", value=5.0, step=1.0)
-    with col2:
-        R2 = st.number_input("R2 (Ω)", value=20.0, step=1.0)
-        E2 = st.number_input("E2 (V)", value=10.0, step=1.0)
-    with col3:
-        R3 = st.number_input("R3 (Ω)", value=30.0, step=1.0)
-        E3 = st.number_input("E3 (V)", value=15.0, step=1.0)
-    
-    if st.button("Resolver Questão 1"):
-        fem_total = E2 + E3 - E1
-        R_total = R1 + R2 + R3
-        I = fem_total / R_total if R_total != 0 else 0
-        VQP = - (I * R1) + E1
-        resposta = round(VQP)
-        
-        st.markdown("---")
-        st.subheader("📐 Resolução detalhada")
-        st.markdown(f"""
-        **Instrumento:** Voltímetro ideal (R∞, paralelo)
-        
-        **1. Corrente na malha principal:**
+        st.markdown("**Insira os valores do circuito:**")
+        col1, col2, col3 = st.columns(3)
         with col1:
-            E_ger = st.number_input("Tensão do gerador (V)", value=50.0)
-            r_int = st.number_input("Resistência interna (Ω)", value=1.0)
+            R1 = st.number_input("R1 (Ω)", value=10.0, step=1.0)
+            E1 = st.number_input("E1 (V)", value=5.0, step=1.0)
         with col2:
-            E_rec = st.number_input("Tensão do receptor (V)", value=20.0)
-            R_outras = st.number_input("Outras resistências (Ω)", value=4.0)
-        I = st.number_input("Corrente medida (A)", value=5.0)
-        if st.button("Calcular R"):
-            R_calc = (E_ger - E_rec) / I - (r_int + R_outras)
-            st.markdown(f"**R = {R_calc:.2f} Ω**")
-            if 7.8 < R_calc < 8.2:
-                st.success("Alternativa A (8 Ω)")
-            elif 4.8 < R_calc < 5.2:
-                st.success("Alternativa B (5 Ω)")
-            elif 3.8 < R_calc < 4.2:
-                st.success("Alternativa C (4 Ω)")
-    elif problema == "Lei de Ohm":
-        ohm_op = st.selectbox("Calcular", ["Tensão (V=R×I)", "Corrente (I=V/R)", "Resistência (R=V/I)"])
-        if ohm_op == "Tensão (V=R×I)":
-            R = st.number_input("R (Ω)", value=10.0)
-            I = st.number_input("I (A)", value=2.0)
-            if st.button("Calcular V"):
-                st.markdown(f"**V = {R} × {I} = {R*I} V**")
-        elif ohm_op == "Corrente (I=V/R)":
-            V = st.number_input("V (V)", value=12.0)
-            R = st.number_input("R (Ω)", value=4.0)
-            if st.button("Calcular I"):
-                st.markdown(f"**I = {V} / {R} = {V/R:.2f} A**")
-        else:
-            V = st.number_input("V (V)", value=12.0)
-            I = st.number_input("I (A)", value=3.0)
-            if st.button("Calcular R"):
-                st.markdown(f"**R = {V} / {I} = {V/I:.2f} Ω**")
-    else:  # Associação de resistores
-        st.subheader("Associação de resistores")
-        tipo_assoc = st.radio("Tipo", ["Série", "Paralelo", "Misto (série+paralelo)"])
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            R1 = st.number_input("R1 (Ω)", value=10.0)
-        with c2:
-            R2 = st.number_input("R2 (Ω)", value=20.0)
-        with c3:
-            R3 = st.number_input("R3 (Ω)", value=30.0)
-        if st.button("Calcular Req"):
-            if tipo_assoc == "Série":
-                Req = R1 + R2 + R3
-                st.markdown(f"**Req = {R1} + {R2} + {R3} = {Req:.2f} Ω**")
-            elif tipo_assoc == "Paralelo":
-                Req = 1 / (1/R1 + 1/R2 + 1/R3)
-                st.markdown(f"**1/Req = 1/{R1} + 1/{R2} + 1/{R3}** → Req = **{Req:.2f} Ω**")
-            else:
-                Rs = R1 + R2
-                Req = (Rs * R3) / (Rs + R3)
-                st.markdown(f"**Série R1+R2 = {Rs:.2f} Ω** → Paralelo com R3: Req = **{Req:.2f} Ω**")
-
-st.sidebar.markdown("---")
-st.sidebar.caption("Detalhamento completo")
-
-  
+            R2 = st.number_input("R2 (Ω)", value=20.0, step=1.0)
+            E2 = st.number_input("E2 (V)", value=10.0, step=1.0)
+        with col3:
+            R3 = st.number_input("R3 (Ω)", value=30.0, step=1.0)
+            E3 = st.number_input("E3 (V)", value=15.0, step=1.0)
+        
+        if st.button("Resolver Questão 1"):
+            fem_total = E2 + E3 - E1
+            R_total = R1 + R2 + R3
+            I = fem_total / R_total if R_total != 0 else 0
+            VQP = - (I * R1) + E1
+            resposta = round(VQP)
+            
+            st.markdown("---")
+            st.subheader("📐 Resolução detalhada")
+            st.markdown(f"""
+            **Instrumento:** Voltímetro ideal (R∞, paralelo)
+            
+            **1. Corrente na malha principal:**
