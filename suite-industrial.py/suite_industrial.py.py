@@ -3,131 +3,155 @@ import math
 
 st.set_page_config(page_title="Suit Industrial", layout="wide")
 
-st.title("🏭 Suit Industrial")
+st.title("Suit Industrial")
 st.subheader("Elétrica | Lubrificação | Pressão | Circuitos CC")
 
 menu = st.sidebar.selectbox(
     "Escolha a calculadora",
-    ["⚡ Elétrica (NBR 5410/NR-10)",
-     "🛢️ Lubrificação (NBR 1409)",
-     "💨 Pressão (NR-13)",
-     "🔌 Circuitos CC (Leis de Kirchhoff)"]
+    ["Elétrica (NBR 5410/NR-10)",
+     "Lubrificação (NBR 1409)",
+     "Pressão (NR-13)",
+     "Circuitos CC (Leis de Kirchhoff)"]
 )
 
-# ==================== ELÉTRICA ====================
-if menu == "⚡ Elétrica (NBR 5410/NR-10)":
-    st.header("⚡ Calculadora Elétrica")
-    tipo = st.selectbox("Tipo de cálculo", [
-        "Potência aparente (kVA)",
-        "Corrente (A) - Monofásico",
-        "Corrente (A) - Trifásico"
-    ])
+# ---------- Elétrica ----------
+if menu == "Elétrica (NBR 5410/NR-10)":
+    st.header("Calculadora Elétrica")
+    tipo = st.selectbox("Tipo", ["Potência aparente (kVA)", "Corrente (A) - Monofásico", "Corrente (A) - Trifásico"])
     col1, col2, col3 = st.columns(3)
-    with col1:
-        P = st.number_input("Potência ativa (kW)", min_value=0.01, value=1.0, step=0.1)
-    with col2:
-        FP = st.number_input("Fator de potência", min_value=0.01, max_value=1.0, value=0.92, step=0.01)
-    with col3:
-        V = st.number_input("Tensão (V)", min_value=1, value=220, step=10)
-
-    if st.button("Calcular", type="primary"):
-        st.markdown("---")
-        if tipo == "Potência aparente (kVA)":
+    with col1: P = st.number_input("Potência (kW)", 0.01, 1.0, 0.1)
+    with col2: FP = st.number_input("Fator potência", 0.01, 1.0, 0.92, 0.01)
+    with col3: V = st.number_input("Tensão (V)", 1, 220, 10)
+    if st.button("Calcular"):
+        if tipo.startswith("Potência"):
             S = P / FP
-            st.markdown(f"**S = P/FP** = {P}/{FP} = **{S:.3f} kVA**")
-        elif tipo == "Corrente (A) - Monofásico":
+            st.write(f"**S = P/FP** = {P}/{FP} = **{S:.3f} kVA**")
+        elif "Monofásico" in tipo:
             I = (P * 1000) / (V * FP)
-            st.markdown(f"**I = (P×1000)/(V×FP)** = ({P}×1000)/({V}×{FP}) = **{I:.2f} A**")
+            st.write(f"**I = (P×1000)/(V×FP)** = ({P}×1000)/({V}×{FP}) = **{I:.2f} A**")
         else:
-            I = (P * 1000) / (math.sqrt(3) * V * FP)
-            st.markdown(f"**I = (P×1000)/(√3×V×FP)** = ({P}×1000)/(1,732×{V}×{FP}) = **{I:.2f} A**")
+            I = (P * 1000) / (1.732 * V * FP)
+            st.write(f"**I = (P×1000)/(√3×V×FP)** = ({P}×1000)/(1,732×{V}×{FP}) = **{I:.2f} A**")
 
-# ==================== LUBRIFICAÇÃO ====================
-elif menu == "🛢️ Lubrificação (NBR 1409)":
-    st.header("🛢️ Calculadora de Lubrificação")
-    tipo_lub = st.selectbox("Tipo", ["Intervalo para troca de óleo", "Quantidade de graxa"])
-    if tipo_lub == "Intervalo para troca de óleo":
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            cap = st.number_input("Capacidade do cárter (L)", value=10.0)
-        with col2:
-            consumo = st.number_input("Consumo de óleo (L/h)", value=0.05, step=0.01, format="%.3f")
-        with col3:
-            carga = st.slider("Fator de carga", 0.1, 1.0, 0.8)
-        if st.button("Calcular troca"):
-            horas = (cap * carga) / consumo
-            st.markdown(f"**Horas = (Capacidade × Carga)/Consumo** = ({cap}×{carga})/{consumo} = **{horas:.0f} h**")
+# ---------- Lubrificação ----------
+elif menu == "Lubrificação (NBR 1409)":
+    st.header("Calculadora de Lubrificação")
+    tipo_lub = st.selectbox("Tipo", ["Troca de óleo", "Quantidade de graxa"])
+    if tipo_lub == "Troca de óleo":
+        cap = st.number_input("Capacidade (L)", 0.1, 10.0, 10.0)
+        cons = st.number_input("Consumo (L/h)", 0.001, 0.05, 0.05, 0.01, format="%.3f")
+        carga = st.slider("Fator carga", 0.1, 1.0, 0.8)
+        if st.button("Calcular"):
+            horas = (cap * carga) / cons
+            st.write(f"**Horas = ({cap}×{carga})/{cons} = {horas:.0f} h**")
     else:
-        col1, col2 = st.columns(2)
-        with col1:
-            diam = st.number_input("Diâmetro do eixo (mm)", value=50)
-        with col2:
-            larg = st.number_input("Largura do mancal (mm)", value=40)
-        if st.button("Calcular graxa"):
-            gramas = diam * larg * 0.114
-            st.markdown(f"**Graxa (g) = Diâmetro × Largura × 0,114** = {diam}×{larg}×0,114 = **{gramas:.1f} g**")
+        diam = st.number_input("Diâmetro eixo (mm)", 1, 100, 50)
+        larg = st.number_input("Largura mancal (mm)", 1, 100, 40)
+        if st.button("Calcular"):
+            g = diam * larg * 0.114
+            st.write(f"**Graxa = {diam}×{larg}×0,114 = {g:.1f} g**")
 
-# ==================== PRESSÃO ====================
-elif menu == "💨 Pressão (NR-13)":
-    st.header("💨 Calculadora de Pressão")
+# ---------- Pressão ----------
+elif menu == "Pressão (NR-13)":
+    st.header("Calculadora de Pressão")
     tipo_press = st.selectbox("Conversão", ["PSI → Bar", "Bar → PSI", "Força do pistão"])
     if tipo_press == "PSI → Bar":
-        psi = st.number_input("PSI", value=100.0)
+        psi = st.number_input("PSI", 0.0, 1000.0, 100.0)
         if st.button("Converter"):
             bar = psi * 0.0689476
-            st.markdown(f"**{psi} PSI = {bar:.3f} bar**")
+            st.write(f"**{psi} PSI = {bar:.3f} bar**")
     elif tipo_press == "Bar → PSI":
-        bar = st.number_input("bar", value=6.9)
+        bar = st.number_input("bar", 0.0, 1000.0, 6.9)
         if st.button("Converter"):
             psi = bar * 14.5038
-            st.markdown(f"**{bar} bar = {psi:.1f} PSI**")
+            st.write(f"**{bar} bar = {psi:.1f} PSI**")
     else:
-        col1, col2 = st.columns(2)
-        with col1:
-            pressao = st.number_input("Pressão (bar)", value=6.9)
-        with col2:
-            diametro = st.number_input("Diâmetro do pistão (cm)", value=5.0)
-        if st.button("Calcular força"):
+        pressao = st.number_input("Pressão (bar)", 0.0, 1000.0, 6.9)
+        diam = st.number_input("Diâmetro pistão (cm)", 0.1, 50.0, 5.0)
+        if st.button("Calcular"):
             Pa = pressao * 100000
-            area = math.pi * (diametro/100)**2 / 4
-            forca_N = Pa * area
-            forca_kgf = forca_N / 9.80665
-            st.markdown(f"**F = P × A** → Força = **{forca_N:.0f} N** ≈ **{forca_kgf:.1f} kgf**")
+            area = math.pi * (diam/100)**2 / 4
+            F = Pa * area
+            st.write(f"**Força = {F:.0f} N** ({F/9.8:.1f} kgf)")
 
-# ==================== CIRCUITOS CC ====================
+# ---------- Circuitos CC ----------
 else:
-    st.header("🔌 Calculadora de Circuitos CC")
+    st.header("Calculadora de Circuitos CC")
     problema = st.selectbox("Problema", [
-        "Questão 1: Voltímetro entre Q e P",
-        "Questão 2: Amperímetro e resistor R",
+        "Questão 1: Voltímetro (editar valores)",
+        "Questão 2: Amperímetro",
         "Lei de Ohm",
         "Associação de resistores"
     ])
 
-    # ------------------ Questão 1 ------------------
     if problema.startswith("Questão 1"):
-        st.markdown("**Insira os valores do circuito:**")
+        st.markdown("**Insira os valores:**")
         col1, col2, col3 = st.columns(3)
         with col1:
-            R1 = st.number_input("R1 (Ω)", value=10.0, step=1.0)
-            E1 = st.number_input("E1 (V)", value=5.0, step=1.0)
+            R1 = st.number_input("R1 (Ω)", 0.1, 100.0, 10.0)
+            E1 = st.number_input("E1 (V)", -50.0, 50.0, 5.0)
         with col2:
-            R2 = st.number_input("R2 (Ω)", value=20.0, step=1.0)
-            E2 = st.number_input("E2 (V)", value=10.0, step=1.0)
+            R2 = st.number_input("R2 (Ω)", 0.1, 100.0, 20.0)
+            E2 = st.number_input("E2 (V)", -50.0, 50.0, 10.0)
         with col3:
-            R3 = st.number_input("R3 (Ω)", value=30.0, step=1.0)
-            E3 = st.number_input("E3 (V)", value=15.0, step=1.0)
-        
-        if st.button("Resolver Questão 1"):
+            R3 = st.number_input("R3 (Ω)", 0.1, 100.0, 30.0)
+            E3 = st.number_input("E3 (V)", -50.0, 50.0, 15.0)
+        if st.button("Resolver"):
             fem_total = E2 + E3 - E1
             R_total = R1 + R2 + R3
             I = fem_total / R_total if R_total != 0 else 0
-            VQP = - (I * R1) + E1
-            resposta = round(VQP)
-            
+            Vqp = - I * R1 + E1
             st.markdown("---")
-            st.subheader("📐 Resolução detalhada")
-            st.markdown(f"""
-            **Instrumento:** Voltímetro ideal (R∞, paralelo)
-            
-            **1. Corrente na malha principal:**
+            st.markdown(f"**Corrente:** Σfem = {fem_total:.2f} V, ΣR = {R_total:.2f} Ω → I = {I:.3f} A")
+            st.markdown(f"**Tensão VQP:** {Vqp:.2f} V → **Resposta: {round(Vqp)} V**")
+            st.success(f"✅ {round(Vqp)} V")
+
+    elif problema.startswith("Questão 2"):
+        col1, col2 = st.columns(2)
+        with col1:
+            E_ger = st.number_input("Gerador (V)", 0.0, 100.0, 50.0)
+            r_int = st.number_input("Resist. interna (Ω)", 0.0, 10.0, 1.0)
+        with col2:
+            E_rec = st.number_input("Receptor (V)", 0.0, 100.0, 20.0)
+            R_out = st.number_input("Outras resist. (Ω)", 0.0, 50.0, 4.0)
+        I = st.number_input("Corrente (A)", 0.1, 20.0, 5.0)
+        if st.button("Calcular R"):
+            R = (E_ger - E_rec)/I - (r_int + R_out)
+            st.write(f"**R = {R:.2f} Ω**")
+            if 7.8 < R < 8.2: st.success("Alternativa A (8 Ω)")
+            elif 4.8 < R < 5.2: st.success("Alternativa B (5 Ω)")
+            elif 3.8 < R < 4.2: st.success("Alternativa C (4 Ω)")
+
+    elif problema == "Lei de Ohm":
+        op = st.selectbox("Calcular", ["Tensão (V=R×I)", "Corrente (I=V/R)", "Resistência (R=V/I)"])
+        if op.startswith("Tensão"):
+            R = st.number_input("R (Ω)", 0.1, 1000.0, 10.0)
+            I = st.number_input("I (A)", 0.1, 1000.0, 2.0)
+            if st.button("Calcular"): st.write(f"V = {R*I} V")
+        elif op.startswith("Corrente"):
+            V = st.number_input("V (V)", 0.1, 1000.0, 12.0)
+            R = st.number_input("R (Ω)", 0.1, 1000.0, 4.0)
+            if st.button("Calcular"): st.write(f"I = {V/R:.2f} A")
+        else:
+            V = st.number_input("V (V)", 0.1, 1000.0, 12.0)
+            I = st.number_input("I (A)", 0.1, 1000.0, 3.0)
+            if st.button("Calcular"): st.write(f"R = {V/I:.2f} Ω")
+
+    else:  # Associação
+        st.subheader("Associação de resistores")
+        tipo = st.radio("Tipo", ["Série", "Paralelo", "Misto"])
+        c1, c2, c3 = st.columns(3)
+        with c1: R1 = st.number_input("R1 (Ω)", 0.1, 1000.0, 10.0)
+        with c2: R2 = st.number_input("R2 (Ω)", 0.1, 1000.0, 20.0)
+        with c3: R3 = st.number_input("R3 (Ω)", 0.1, 1000.0, 30.0)
+        if st.button("Calcular Req"):
+            if tipo == "Série":
+                Req = R1 + R2 + R3
+            elif tipo == "Paralelo":
+                Req = 1 / (1/R1 + 1/R2 + 1/R3)
+            else:
+                Req = (R1 + R2) * R3 / (R1 + R2 + R3)
+            st.write(f"Req = {Req:.2f} Ω")
+
+st.sidebar.markdown("---")
+st.sidebar.caption("Detalhamento completo")
